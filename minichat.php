@@ -18,6 +18,41 @@
 
 <body>
 
+  <form action="minichat_post.php" method="post">
+    <label for="pseudo">Pseudo</label><br/>
+    <input type="text" name="pseudo" id="pseudo"><br/>
+    <label for="message">Message</label><br/>
+    <input type="text" name="message" id="message"><br/>
+    <input type="submit" value="Envoyer">
+  </form>
+
+  <?php
+
+  try {
+    $bdd = new PDO('mysql:host=localhost;dbname=test;charset=utf8', 'root', '', array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+  }
+  catch (\Exception $e) {
+    die('Erreur : ' . $e->getMessage());
+  }
+  // $bdd->exec('DELETE FROM minichat');
+  $reponse = $bdd->query('SELECT * FROM minichat ORDER BY id DESC LIMIT 0,10');
+  echo '<ul>';
+
+  while ($donnees = $reponse->fetch()){
+  ?>
+
+    <p>
+      <?php echo '<strong>' . htmlspecialchars($donnees['pseudo']) . '</strong> : ' . htmlspecialchars($donnees['message']); ?><br />
+    </p>
+
+  <?php
+  }
+
+  echo '</ul>';
+
+  $reponse->closeCursor();
+
+  ?>
 
   <script src="js/vendor/modernizr-3.6.0.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
